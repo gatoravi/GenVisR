@@ -20,7 +20,7 @@
 #' @import reshape2
 #' @importFrom "gtools" mixedsort
 
-cnSpec <- function(x, y=NULL, genome='hg19', title=NULL, CN_low_colour='#002EB8', CN_high_colour='#A30000', x_lab_size=12, y_lab_size=12, facet_lab_size=10, layers=NULL)
+cnSpec <- function(x, y=NULL, genome='hg19', title=NULL, CN_low_colour='#002EB8', CN_high_colour='#A30000', x_lab_size=12, y_lab_size=12, facet_lab_size=10, layers=NULL, sample_levels = NULL)
 {
   # Perform quality check on input data
   data <- cnSpec.qual(x, y, genome)
@@ -76,8 +76,13 @@ cnSpec <- function(x, y=NULL, genome='hg19', title=NULL, CN_low_colour='#002EB8'
   CN_data$chromosome <- factor(CN_data$chromosome, levels=chromosome_sorted)
   sample_sorted <- as.vector(unique(CN_data$sample))
   sample_sorted <- mixedsort(sample_sorted)
-  CN_data$sample <- factor(CN_data$sample, levels=sample_sorted)
-  
+  if (length(sample_levels) == 0) {
+      print(c("not using ", sample_levels))
+      CN_data$sample <- factor(CN_data$sample, levels=c("WGS", "Exome", "Microarray"))
+  } else {
+      print(c("using ", sample_levels))
+      CN_data$sample <- factor(CN_data$sample, levels=sample_levels)
+  }
   # Construct the plot
   p1 <- build.cnSpec(CN_data, plot_title=title, CN_low_colour=CN_low_colour, CN_high_colour=CN_high_colour, x_lab_size=x_lab_size, y_lab_size=y_lab_size, facet_lab_size=facet_lab_size, layers=layers)
   

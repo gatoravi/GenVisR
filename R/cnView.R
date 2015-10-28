@@ -69,5 +69,5 @@ cnView <- function(x, y=NULL, z=NULL, genome='hg19', chr='chr1', main.cnDiff=FAL
   
   p1 <- align_y_cn(chromosome_plot, CN_plot)
   
-  return(grid.arrange(p1))
+  return(p1)
 }

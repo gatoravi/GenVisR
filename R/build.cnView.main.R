@@ -14,7 +14,7 @@
 build.cnView.main <- function(x, y, z=NULL, chr, cnDiff=FALSE, layers=NULL)
 {
   # Define various parameters of the plot
-  dummy_data <- geom_point(data=y, mapping=aes_string(x='coordinate', y=2), alpha=0)
+  dummy_data <- geom_point(data=y, mapping=aes_string(x='coordinate', y=0), alpha=0)
   
   theme <- theme(axis.text.x=element_text(angle=30, hjust=1))
   if(cnDiff == TRUE)
@@ -26,11 +26,11 @@ build.cnView.main <- function(x, y, z=NULL, chr, cnDiff=FALSE, layers=NULL)
   } else if(cnDiff == FALSE)
   {
     # cn fill colors
-    shade_cn <- scale_color_gradient2(midpoint=2, low='#009ACD', mid='#646082', high='#C82536', space='Lab')
+    shade_cn <- scale_color_gradient2(limits = c(-3, 2.5), midpoint = 0, low='#009ACD', mid='#646082', high='#C82536', space='Lab')
     # y label
-    ylabel <- ylab('Copy Number')
+    ylabel <- ylab('Log R')
   }
-  xlabel <- xlab('Coordinate')
+  xlabel <- xlab('Chromosome/Coordinate')
   
   if(!is.null(layers))
   {
@@ -38,16 +38,8 @@ build.cnView.main <- function(x, y, z=NULL, chr, cnDiff=FALSE, layers=NULL)
   } else {
     layers <- geom_blank()
   }
-  
-  # if x contains a p_value column set an alpha for it and plot points
-  if(any('p_value' %in% colnames(x)))
-  {
-    x$transparency <- 1-x$p_value
-    cnpoints <- geom_point(data=x, mapping=aes_string(x='coordinate', y='cn', colour='cn', alpha='transparency'))
-  } else {
-    cnpoints <- geom_point(data=x, mapping=aes_string(x='coordinate', y='cn', colour='cn'))
-  }
-  
+
+  cnpoints <- geom_point(data=x, mapping=aes_string(x='coordinate', y='cn', colour='cn'), size = 1)
   # Define segments for main plot
   if(!is.null(z))
   {
@@ -55,9 +47,12 @@ build.cnView.main <- function(x, y, z=NULL, chr, cnDiff=FALSE, layers=NULL)
   } else {
     cnseg <- geom_blank()
   }
+
+  print(summary(x$chromosome))
   
   # build the plot
-  p1 <- ggplot() + cnpoints + shade_cn + ylabel + xlabel + theme_bw() + theme + cnseg + dummy_data + layers
+  p1 <- ggplot(data = x) + cnpoints + shade_cn + ylabel + xlabel + theme_bw() + theme + cnseg + dummy_data + layers + ylim(c(-3, 3)) + scale_size_continuous(range = c(1,1)) + theme(axis.ticks.x = element_blank(), axis.text.x = element_blank(), legend.title = element_blank()) + geom_hline(yintercept = log10(3/2)) + geom_hline(yintercept = log10(1/2)) #scale_x_continuous(breaks = seq(1, 250e6, by = 100e6))
+
   
   if(chr == 'all')
   {

@@ -17,7 +17,7 @@ cnView.qual <- function(x, y, genome)
     x <- droplevels(x)
   }
   
-  if(!all(c('chromosome', 'coordinate', 'cn', 'p_value') %in% colnames(x)))
+  if(!all(c('chromosome', 'coordinate', 'cn') %in% colnames(x)))
   {
     stop("Did not detect correct columns in x, missing one of chromosome, coordinate, cn, p_value")
   }
@@ -33,10 +33,11 @@ cnView.qual <- function(x, y, genome)
   } else {
     stop("Detected unknown or mixed prefixes in the chromosome column of x, should either have a chr prefix or none at all")
   }
-  
-  # make sure the chromosome column is of class factor
-  x$chromosome <- as.factor(x$chromosome)
-  
+
+  # reorder the chromosomes
+  chromosomes <- gtools::mixedsort(unique(x$chromosome))
+  x$chromosome <- factor(x$chromosome, levels=chromosomes)
+
   # Check y data
   preloaded <- c("hg38", "hg19", "mm10", "mm9", "rn5")
   if(!is.null(y))
@@ -61,5 +62,6 @@ cnView.qual <- function(x, y, genome)
     }
   }
   
+  print(summary(x$chromosome))
   return(list(x, y))
 }

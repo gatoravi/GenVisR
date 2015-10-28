@@ -20,13 +20,14 @@ build.cnSpec <- function(data_frame, plot_title=NULL, CN_low_colour='#002EB8', C
     dummy_data <- data_frame
   
     # Define Theme of plot
-    theme <- theme(strip.text.y=element_text(angle=0, size=facet_lab_size), strip.text.x=element_text(size=facet_lab_size), axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(), legend.position='right', axis.title.x=element_text(size=x_lab_size, face='bold'), axis.title.y=element_text(size=y_lab_size, face='bold'))
+    theme <- theme(strip.text.y=element_text(size=facet_lab_size), strip.text.x=element_text(size=facet_lab_size), axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(), legend.position='right', axis.title.x=element_text(size=x_lab_size, face='bold'), axis.title.y=element_text(size=y_lab_size, face='bold'))
   
     # Define parameters of plot
     facet <- facet_grid(sample ~ chromosome, scales='free', space='free')
-    fill_gradient <- scale_fill_gradientn(colours=c(CN_low_colour, 'white', CN_high_colour), values=rescale(c(0, 2, 4)), limits=c(0, 4), oob=squish)
-    ylabel <- ylab('Sample')
-    xlabel <- xlab('Chromosome')
+    #fill_gradient <- scale_fill_gradient2(midpoint=0, low='#009ACD', mid='#646082', high='#C82536', limits=c(-2, 2))
+    fill_gradient <- scale_fill_gradientn(colours = c(CN_low_colour, 'white', CN_high_colour), limits=c(-2, 2), name = element_text("Copy number\ndifference\n(Tumor - Normal)"), oob = squish)
+    ylabel <- ylab('')
+    xlabel <- xlab('')
     title <- ggtitle(plot_title)
     if(!is.null(layers))
     {
