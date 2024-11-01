@@ -1601,7 +1601,7 @@ setMethod(f="buildGenePlot",
               if(plotBTally == "simple"){
                   # if simple we have to reset mutations to NA
                   geneData$mutation <- "NA"
-                  plotLegend <- scale_fill_manual(name="Translational Effect",
+                  plotLegend <- scale_fill_manual(name="",
                                                   na.value="deepskyblue4", values="deepskyblue4")
               }else if(plotBTally == "complex"){
                   plotLegend <- scale_fill_manual(name="Translational Effect",
@@ -1621,7 +1621,7 @@ setMethod(f="buildGenePlot",
               }
               
               genePlot <- genePlot + plotGeom + theme_bw() + coord_flip() + plotTheme +
-                  plotYlabel + scale_y_reverse() + plotLegend + plotBLayers
+                  plotYlabel + scale_y_reverse() + plotBLayers
               
               plotGrob <- ggplotGrob(genePlot)
           })
