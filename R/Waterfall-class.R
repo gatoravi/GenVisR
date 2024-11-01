@@ -1811,7 +1811,7 @@ setMethod(f="buildWaterfallPlot",
                                                              fill=NA))
               
               if(sampleNames){
-                  sampleLabels <- theme(axis.text.x=element_text(angle=50, hjust=1))
+                  sampleLabels <- theme(axis.text.x=element_blank())
               } else {
                   sampleLabels <- theme(axis.text.x=element_blank(),
                                         axis.title.x=element_blank())
